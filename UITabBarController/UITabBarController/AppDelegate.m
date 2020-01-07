@@ -52,13 +52,17 @@
     [tabBarVC addChildViewController:twoVC];
     
     //添加第三个 tab 对应的视图
-    UINavigationController *nav = [[UINavigationController alloc] init];
+    UINavigationController *navVC = [[UINavigationController alloc] init];
+    navVC.edgesForExtendedLayout = UIRectEdgeNone;
+    //设置半透明为 NO，导航栏就不会遮挡UIViewController，下面2行代码，2选1即可
+    navVC.navigationBar.translucent = NO;
+    //    navVC.edgesForExtendedLayout = UIRectEdgeNone;
     //设置标题
-    nav.tabBarItem.title = @"图片";
+    navVC.tabBarItem.title = @"图片";
     //设置图片
-    nav.tabBarItem.image = [[UIImage imageNamed:@"photo"] imageWithRenderingMode:(UIImageRenderingModeAutomatic)];
+    navVC.tabBarItem.image = [[UIImage imageNamed:@"photo"] imageWithRenderingMode:(UIImageRenderingModeAutomatic)];
     //设置选中状态下的图片
-    nav.tabBarItem.selectedImage = [[UIImage imageNamed:@"photo"] imageWithRenderingMode:(UIImageRenderingModeAlwaysOriginal)];
+    navVC.tabBarItem.selectedImage = [[UIImage imageNamed:@"photo"] imageWithRenderingMode:(UIImageRenderingModeAlwaysOriginal)];
     
     UIViewController *three1VC = [[UIViewController alloc] init];
     three1VC.view.backgroundColor = [UIColor blueColor];
@@ -73,15 +77,16 @@
     [three3VC setTitle:@"Three3"];
     
     //添加三个子视图
-    [nav setViewControllers:@[three1VC, three2VC, three3VC]];
+    [navVC setViewControllers:@[three1VC, three2VC, three3VC]];
     
-    [tabBarVC addChildViewController:nav];
+    [tabBarVC addChildViewController:navVC];
     
     //手动设置当前选中的是哪一个控制器
     //默认显示的第一个添加的子控制器的View
     //tabBarVC.selectedInd
     
-    self.window.rootViewController = tabBarVC;
+//    self.window.rootViewController = tabBarVC;
+    [self.window setRootViewController:tabBarVC];
     //3.显示窗口
     [self.window makeKeyAndVisible];
     

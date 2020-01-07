@@ -27,6 +27,9 @@
     //创建UINavigationController，将根视图控制器作为它的根视图
 //    navVC = [[UINavigationController alloc] initWithRootViewController:rootVC];
     navVC = [[UINavigationController alloc] init];
+    //设置半透明为 NO，导航栏就不会遮挡UIViewController，下面2行代码，2选1即可
+    navVC.navigationBar.translucent = NO;
+//    navVC.edgesForExtendedLayout = UIRectEdgeNone;
     
     UIViewController *vc1 = [self createVCWithTitle:[NSString stringWithFormat:@"第%ld页", ++counter] pageNumber:counter];
     UIViewController *vc2 = [self createVCWithTitle:[NSString stringWithFormat:@"第%ld页", ++counter] pageNumber:counter];
