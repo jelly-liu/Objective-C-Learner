@@ -110,6 +110,11 @@
     //获取指定的数据
     cell.textLabel.text= [tableData objectAtIndex:indexPath.row];
     
+
+    cell.imageView.image=[UIImage imageNamed:@"photo"];
+    
+    //每一行 右侧小箭头
+    cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
     
     return cell;
 }
