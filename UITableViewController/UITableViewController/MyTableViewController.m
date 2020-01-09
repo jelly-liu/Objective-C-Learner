@@ -37,8 +37,9 @@
     NSArray<NSString*> *array3 = @[@"周泰",@"魏延",@"张绣",@"颜良",@"文丑",@"邓艾",@"姜维"];
     generalArray = [[NSArray alloc] initWithObjects:array1, array2, array3, nil];
     
-    //设置 下接刷新功能，并加载第一批数据到数据源
-    [self setupRefreshWithLoadData];
+    [tableData addObjectsFromArray:array1];
+    [tableData addObjectsFromArray:array2];
+    [tableData addObjectsFromArray:array3];
     
     //创建UITableView对象
     UILabel *headerLabel = [[UILabel alloc]initWithFrame:CGRectMake(0, 0, self.view.frame.size.width, 44.0)];
@@ -74,47 +75,6 @@
     self.tableView.dataSource = self;
 }
 
-// 设置下拉刷新功能
-- (void)setupRefreshWithLoadData {
-    refreshControl = [[UIRefreshControl alloc] init];
-    [refreshControl addTarget:self action:@selector(refreshClick:) forControlEvents:UIControlEventValueChanged];
-    refreshControl.attributedTitle = [[NSAttributedString alloc]initWithString:@"-- 下拉刷新中 --"];
-    //刷新图形时的颜色，即刷新的时候那个菊花的颜色
-    refreshControl.tintColor = [UIColor greenColor];
-    [self.tableView addSubview:refreshControl];
-    
-    //模拟一次点击，加载批一批数据到数据源
-    [self refreshClick:refreshControl];
-}
-
-// 由下拉刷新触发，在此获取数据
-- (void)refreshClick:(UIRefreshControl *)refreshControl {
-//    [tableData removeAllObjects];//清除旧数据，每次都加载最新的数据
-    //begin refresing
-    [refreshControl beginRefreshing];
-    Boolean hasMoreData = [self loadMyData];
-    [refreshControl endRefreshing];
-    if(hasMoreData){
-        [self.tableView reloadData];
-    }
-}
-
--(Boolean) loadMyData{
-    if(index > generalArray.count - 1){
-        //没有更多的数据了
-        refreshControl.attributedTitle = [[NSAttributedString alloc]initWithString:@"-- 已经到底了 --"];
-        return NO;
-    }
-    
-    //模拟加载数据，延迟1秒
-    [NSThread sleepForTimeInterval:1.0f];
-    [tableData addObjectsFromArray:generalArray[index]];
-    NSLog(@"tableData.count=%ld", tableData.count);
-    
-    index++;
-    return YES;
-}
-
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
     //#warning Incomplete implementation, return the number of sections
     return 1;
@@ -122,7 +82,6 @@
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
     //#warning Incomplete implementation, return the number of rows
-    NSLog(@"tableData.count1=%ld", tableData.count);
     return tableData.count;
 }
 
@@ -156,12 +115,13 @@
 }
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath{
-    NSString *valueSelected = [NSString stringWithFormat:@"您选择了：%@", [tableData objectAtIndex:indexPath.row]];
-    [self showAlert:valueSelected];
+    NSString *title = [tableData objectAtIndex:indexPath.row];
+    NSString *message = [NSString stringWithFormat:@"%@ 三图著名人物...", title];
+    [self showAlertTitle:title massage:message];
 }
 
-- (void) showAlert:(NSString*)message{
-    UIAlertController *alertCtl = [UIAlertController alertControllerWithTitle:@"提示" message:message preferredStyle:UIAlertControllerStyleAlert];
+- (void) showAlertTitle:(NSString*)title massage:(NSString*)message {
+    UIAlertController *alertCtl = [UIAlertController alertControllerWithTitle:title message:message preferredStyle:UIAlertControllerStyleAlert];
     [alertCtl addAction:[UIAlertAction actionWithTitle:@"取消" style:UIAlertActionStyleCancel handler:^(UIAlertAction * _Nonnull action) {
         NSLog(@"你点了取消");
     }]];
